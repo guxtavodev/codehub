@@ -1,0 +1,54 @@
+main {
+  margin: 0 auto;
+  width: 80%;
+  background: #c2c2c2;
+  color: #1c1c1c;
+  border: none;
+  border-radius: 12px;
+  padding: 1em;
+}
+
+main h2{
+  text-align: center;
+}
+
+main .form-g {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+
+.form-g input{
+  border: none;
+  outline: none;
+  padding: 0.5em;
+  border-radius: 6px;
+}
+
+main button{
+  background: #0055ff;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 0.5em;
+  border-radius: 6px;
+  width: 100%;
+  margin-top: 1em;
+}
+
+@media screen and (max-width: 1000px) {
+  header{
+    font-size: 3em;
+  }
+  main {
+    font-size: 2.5em;
+  }
+
+  main input{
+    font-size: 1em;
+  }
+
+  button{
+    font-size: 0.9em;
+  }
+}
