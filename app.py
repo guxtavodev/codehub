@@ -17,17 +17,6 @@ class Posts(db.Model):
     likes = db.relationship('Likes', backref='post', lazy=True)
     comments = db.relationship('Comments', backref='post', lazy=True)
 
-class Likes(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    post_id = db.Column(db.String(255), db.ForeignKey('posts.id'), nullable=False)
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id'), nullable=False)
-
-class Comments(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    post_id = db.Column(db.String(255), db.ForeignKey('posts.id'), nullable=False)
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id'), nullable=False)
-    text = db.Column(db.String(255))
-
 with app.app_context():
     db.create_all()
 
@@ -92,44 +81,6 @@ class Post():
       db.session.delete(post)
       db.session.commit()
 
-  def comentar(self, post, comentario, autor):
-    newComment = Comments(post_id=post, user_id=autor, text=comentario)
-    db.session.add(newComment)
-    db.session.commit()
-
-    return {
-      "msg": "success"
-    }
-
-  def deletar_comentario(self, comentario, password):
-    comentario = Comments.query.filter_by(id=comentario).first()
-    autor = Users.query.filter_by(username=comentario.user_id).first()
-    if autor and password == autor.password:
-      db.session.delete(comentario)
-      db.session.commit()
-      return {
-        "msg": "success"
-      }
-    else:
-      return {
-        "msg": "incorrect password"
-      }
-
-  def curtir(self, post, autor):
-    newCurtida = Likes(post_id=post, user_id=autor)
-    db.session.add(newCurtida)
-    db.session.commit()
-    return {
-      "msg": "success"
-    }
-
-  def descurtir(self, post, autor):
-    curtida = Likes.query.filter_by(post_id=post, user_id=autor).first()
-    db.session.delete(curtida)
-    db.session.commit()
-    return {
-      "msg": "success"
-    }
 
 @app.route("/api/delete-account", methods=["GET"])
 def deletarConta():
@@ -147,33 +98,16 @@ def homepage():
 
 @app.route("/api/get-posts", methods=["GET"])
 def getPosts():
-    user_id = request.args.get("user")
-    liked_post_ids = db.session.query(Likes.post_id).filter_by(user_id=user_id).subquery()
-
-    # Recupera todos os posts que não estão na subconsulta dos posts que o usuário curtiu
-    posts_not_liked = Posts.query.filter(Posts.id.notin_(liked_post_ids)).all()
+    # Recupera todos os posts da tabela 'Posts'
+    all_posts = Posts.query.all()
 
     posts_data = []
-    for post in posts_not_liked:
+    for post in all_posts:
         post_data = {
             'id': post.id,
             'text': post.text,
             'author': post.author
         }
-
-        # Consulta para obter os três últimos comentários relacionados a cada post
-        last_comments = Comments.query.filter_by(post_id=post.id).order_by(Comments.id.desc()).limit(3).all()
-
-        comments_data = []
-        for comment in last_comments:
-            comment_data = {
-                'id': comment.id,
-                'user_id': comment.user_id,
-                'text': comment.text
-            }
-            comments_data.append(comment_data)
-
-        post_data['comments'] = comments_data
         posts_data.append(post_data)
 
     return {'posts': posts_data}
@@ -207,18 +141,6 @@ def editInfos():
     "user": request.args.get("user")
   }
   return jsonify(User().edit_password(data["newPassword"], data["password"], data["user"]))
-
-@app.route("/api/criar-comentario", methods=["POST"])
-def criarComentario():
-  data = request.get_json()
-
-  return jsonify(Post().comentar(data["post"], data["comentario"], data["user"]))
-
-@app.route("/api/like-post", methods=["POST"])
-def likePost():
-  data = request.get_json()
-
-  return jsonify(Post().curtir(data["post"], data["user"]))
 
 if __name__ == '__main__':
     app.run(port=8080, host="0.0.0.0")
