@@ -6,16 +6,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
 
 class Users(db.Model):
-    id = db.Column(db.String(255), primary_key=True)
+    id = db.Column(db.String(255))
     username = db.Column(db.String(30))
     password = db.Column(db.String(30))
 
 class Posts(db.Model):
-    id = db.Column(db.String(255), primary_key=True)
-    text = db.Column(db.String(255))
+    id = db.Column(db.String(255))
+    text = db.Column(db.String(255), primary_key=True)
     author = db.Column(db.String(30))
-    likes = db.relationship('Likes', backref='post', lazy=True)
-    comments = db.relationship('Comments', backref='post', lazy=True)
+
 
 with app.app_context():
     db.create_all()
