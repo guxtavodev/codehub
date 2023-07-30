@@ -24,7 +24,7 @@ main textarea {
   height: 4em;
 }
 
-main button{
+button{
   margin: 0 auto;
   width: 80%;
   margin-top: 1.5em;
@@ -114,5 +114,18 @@ main button{
 
   .comment p{
     font-size: 2em;
+  }
+
+  header nav {
+    font-size: 0.8em;
+    gap: 1em;
+  }
+
+  button{
+    font-size: 0.7em;
+  }
+
+  .btnss button {
+    font-size: 1.5em;
   }
 }
