@@ -22,5 +22,8 @@ header {
 }
 
 header nav {
+  display: flex;
   font-size: 1.5em;
+  gap: 2em;
 }
+
