@@ -17,7 +17,11 @@ if(localStorage.getItem("user")) {
     })
   })
 } else {
-  axios.get("/api/get-posts?user=visit").then((r) => {
+  document.querySelector("nav").innerHTML = `
+    <p onclick="window.location.href = '/cadastro'">Cadastrar-se</p>
+    <p onclick="window.location.href = '/auth'">Conectar-se</p>
+  `
+  axios.get("/api/get-posts?user=guxtavodev").then((r) => {
     var resposta = r.data
     resposta.artigos.forEach((artigo) => {
       document.querySelector(".list-posts").innerHTML += `
@@ -99,22 +103,31 @@ function clickUser() {
     Swal.fire({
       title: "O que você deseja fazer?",
       html: `
+      <div class='btnss'>
         <button onclick="deleteAccount()">Deletar Conta</button>
         <button onclick="changePassword()">Mudar Senha</button>
+        <button onclick="sairDaConta()">Sair da conta neste dispositivo</button>
+        </div>
       `
     })
   }
+}
+
+function sairDaConta() {
+  localStorage.removeItem('user')
+  window.location.href = '/'
 }
 
 function deleteAccount() {
   var confirme = confirm("Deseja realmente deletar sua conta?")
   if(confirme === true) {
     var senha = prompt("Digite sua senha")
-    axios.post("/api/delete-account?user="+localStorage.getItem("user")+"&senha="+senha).then((r) => {
+    axios.get("/api/delete-account?user="+localStorage.getItem("user")+"&senha="+senha).then((r) => {
       var resposta = r.data
       if(resposta.msg === "success") {
         localStorage.removeItem("user")
-        return alert("Conta Deletada com sucesso!")
+        alert("Conta Deletada com sucesso!")
+        window.location.href = "/cadastro"
       } else {
         return alert("Erro ao deletar sua conta")
       }
