@@ -11,7 +11,7 @@ class Users(db.Model):
     password = db.Column(db.String(30))
 
 class Posts(db.Model):
-    id = db.Column(db.String(255), primary_key=True, unique=True)
+    id = db.Column(db.String(255), primary_key=True)
     text = db.Column(db.String(255))
     author = db.Column(db.String(30))
     likes = db.relationship('Likes', backref='post', lazy=True)
