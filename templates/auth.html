@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>CodeHub - Página Inicial</title>
+    <script src="https://kit.fontawesome.com/10a3c48e4c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/css/default.css">
+    <link rel="stylesheet" href="../static/css/cadastro.css">
+  </head>
+  <body>
+    <header>
+      <h1>CodeHub</h1>
+      <nav>
+        <i onclick="clickUser()" class="fa-solid fa-user"></i>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Seja bem vindo(a) ao CodeHub!</h2>
+      <div class="form-g">
+        <label>Nome de usuário</label>
+        <input type="text" id="username" placeholder="Digite seu nome de usuário aqui">
+      </div>
+
+      <div class="form-g">
+        <label>Digite a senha de sua conta</label>
+        <input type="text" id="password" placeholder="Digite a senha aqui">
+      </div>
+
+      <button onclick="entrar()">Entrar</button>
+      
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    <script src="../static/js/auth.js"></script>
+  </body>
+</html>
