@@ -15,6 +15,8 @@ def generate_random_id():
 class Users(db.Model):
     username = db.Column(db.String(30), primary_key=True)
     password = db.Column(db.String(30))
+    id = db.Column(db.Integer, autoincrement=True)
+    
 
 class Posts(db.Model):
     text = db.Column(db.String(255), primary_key=True)
@@ -27,7 +29,7 @@ with app.app_context():
 
 class User():
   def cadastrar(self, username, password):
-    newUser = Users(username=username, password=password)
+    newUser = Users(username=username, password=password, id=2)
     db.session.add(newUser)
     db.session.commit()
 
@@ -41,6 +43,10 @@ class User():
     if user and password == user.password:
       return {
         "msg": "success"
+      }
+    else:
+      return {
+        "msg": "incorrect password"
       }
 
   def delete_user(self, id):
@@ -113,6 +119,16 @@ def getPosts():
 
     return {'posts': posts_data}
 
+@app.route("/auth")
+def loginPage():
+  return render_template("auth.html")
+
+@app.route("/api/auth", methods=["GET"])
+def authUser():
+  username = request.args.get('username')
+  password = request.args.get('password')
+
+  return jsonify(User().auth(username, password))
 
 @app.route("/cadastro")
 def cadastroPage():
@@ -134,7 +150,7 @@ def logarConta():
 def settingsPage():
   return render_template("settings.html")
 
-@app.route("/api/change-password", methods=["POST"])
+@app.route("/api/change-password", methods=["GET"])
 def editInfos():
   data = {
     "newPassword": request.args.get("senha-nova"),
