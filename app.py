@@ -1,13 +1,12 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import uuid
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 db = SQLAlchemy(app)
 
 class Users(db.Model):
-    id = db.Column(db.String(255), primary_key=True, unique=True)
+    id = db.Column(db.String(255), primary_key=True)
     username = db.Column(db.String(30))
     password = db.Column(db.String(30))
 
@@ -34,8 +33,7 @@ with app.app_context():
 
 class User():
   def cadastrar(self, username, password):
-    idUnico = uuid.uuid4()
-
+    idUnico = "12347"
     newUser = Users(id=str(idUnico), username=username, password=password)
     db.session.add(newUser)
     db.session.commit()
@@ -78,7 +76,7 @@ class User():
 
 class Post():
   def create(self, text, author):
-    newPost = Posts(id=str(uuid.uuid4()), text=text, author=author)
+    newPost = Posts(id="ok", text=text, author=author)
     db.session.add(newPost)
     db.session.commit()
 
