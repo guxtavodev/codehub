@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 import time
+from passlib.hash import bcrypt_sha256
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -28,48 +29,49 @@ with app.app_context():
     db.create_all()
 
 class User():
-  def cadastrar(self, username, password):
-    newUser = Users(username=username, password=password, id=2)
-    db.session.add(newUser)
-    db.session.commit()
+    def cadastrar(self, username, password):
+        password_hash = bcrypt_sha256.hash(password)
+        newUser = Users(username=username, password=password_hash, id=int(generate_random_id()))
+        db.session.add(newUser)
+        db.session.commit()
 
-    return {
-      "msg": "success"
-    }
+        return {
+            "msg": "success"
+        }
 
-  def auth(self, username, password):
-    user = Users.query.filter_by(username=username).first()
+    def auth(self, username, password):
+        user = Users.query.filter_by(username=username).first()
 
-    if user and password == user.password:
-      return {
-        "msg": "success"
-      }
-    else:
-      return {
-        "msg": "incorrect password"
-      }
+        if user and bcrypt_sha256.verify(password, user.password):
+            return {
+                "msg": "success"
+            }
+        else:
+            return {
+                "msg": "incorrect password"
+            }
 
-  def delete_user(self, id):
-    user = Users.query.filter_by(username=id).first()
-    db.session.delete(user)
-    db.session.commit()
+    def delete_user(self, id):
+        user = Users.query.filter_by(username=id).first()
+        db.session.delete(user)
+        db.session.commit()
 
-    return {
-      "msg": "success"
-    }
+        return {
+            "msg": "success"
+        }
 
-  def edit_password(self, newPassword, password, id):
-    user = Users.query.filter_by(username=id).first()
-    if user.password == password:
-      user.password = password 
-      db.session.commit()
-      return {
-        "msg": "success"
-      }
-    else:
-      return {
-        "msg": "incorrect password"
-      }
+    def edit_password(self, newPassword, password, id):
+        user = Users.query.filter_by(username=id).first()
+        if bcrypt_sha256.verify(password, user.password):
+            user.password = bcrypt_sha256.hash(newPassword)
+            db.session.commit()
+            return {
+                "msg": "success"
+            }
+        else:
+            return {
+                "msg": "incorrect password"
+            }
 
 class Post():
   def create(self, text, author):
