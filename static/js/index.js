@@ -1,3 +1,5 @@
+localStorage.removeItem("user")
+
 if(localStorage.getItem("primeira-vez")) {
   Swal.fire({
     title: "🎊 Seja bem vindo! 🎊",
