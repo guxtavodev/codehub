@@ -1,4 +1,4 @@
-localStorage.removeItem("user")
+
 
 if(localStorage.getItem("primeira-vez")) {
   Swal.fire({
@@ -17,6 +17,7 @@ function escapeHTML(text) {
 }
 
 if(localStorage.getItem("user")) {
+  
   axios.get("/api/get-posts?user="+localStorage.getItem("user")).then((r) => {
     var resposta = r.data
     resposta.posts.forEach((artigo) => {
