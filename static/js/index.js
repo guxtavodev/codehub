@@ -1,4 +1,4 @@
-
+window.location.href = "https://code-hub.guxtavodev.repl.co/"
 
 if(localStorage.getItem("primeira-vez")) {
   Swal.fire({
