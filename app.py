@@ -73,7 +73,7 @@ class User():
 
 class Post():
   def create(self, text, author):
-    newPost = Posts(text=text, author=author)
+    newPost = Posts(text=text, author=author, id=generate_random_id())
     db.session.add(newPost)
     db.session.commit()
 
@@ -82,12 +82,26 @@ class Post():
     }
 
   def delete(self, post, password):
-    post = Posts.query.filter_by(id=id).first()
-    autor = Users.query.filter_by(author=post.author).first()
+    post = Posts.query.filter_by(id=int(post)).first()
+    autor = Users.query.filter_by(username=post.author).first()
     if autor and password == autor.password:
       db.session.delete(post)
       db.session.commit()
+      return {
+        "msg": "success"
+      }
+    else:
+      return {
+        "msg": "incorrect password"
+      }
 
+
+@app.route("/api/delete-post", methods=["GET"])
+def deletarPost():
+  post = request.args.get("post")
+  senha = request.args.get("password")
+
+  return jsonify(Post().delete(post, senha))
 
 @app.route("/api/delete-account", methods=["GET"])
 def deletarConta():
@@ -158,6 +172,19 @@ def editInfos():
     "user": request.args.get("user")
   }
   return jsonify(User().edit_password(data["newPassword"], data["password"], data["user"]))
+
+@app.route("/perfil/<user>")
+def perfilUser(user):
+  posts_user = Posts.query.filter_by(author=user).all()
+  posts = []
+  for post in posts_user:
+    posts.append({
+      "text": post.text,
+      "author": post.author,
+      "id": post.id
+    })
+
+  return render_template("perfil.html", posts=posts, username=user)
 
 if __name__ == '__main__':
     app.run(port=8080, host="0.0.0.0")
