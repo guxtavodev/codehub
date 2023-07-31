@@ -27,3 +27,6 @@ header nav {
   gap: 2em;
 }
 
+h1, i {
+  cursor: pointer;
+}
