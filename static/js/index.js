@@ -8,6 +8,12 @@ if(localStorage.getItem("primeira-vez")) {
   localStorage.removeItem("primeira-vez")
 }
 
+function escapeHTML(text) {
+            var element = document.createElement('div');
+            element.innerText = text;
+            return element.innerHTML;
+}
+
 if(localStorage.getItem("user")) {
   axios.get("/api/get-posts?user="+localStorage.getItem("user")).then((r) => {
     var resposta = r.data
@@ -20,7 +26,7 @@ if(localStorage.getItem("user")) {
           <strong onclick="window.location.href='/perfil/${artigo.author}'">@${artigo.author}</strong>
         </div>
         <!-- conteudo -->
-        <p id="conteudo">${artigo.text}</p>
+        <p id="conteudo">${escapeHTML(artigo.text)}</p>
         </div>
       </div>
       `
@@ -42,7 +48,7 @@ if(localStorage.getItem("user")) {
           <strong>@${artigo.author}</strong>
         </div>
         <!-- conteudo -->
-        <p id="conteudo">${artigo.text}</p>
+        <p id="conteudo">${escapeHTML(artigo.text)}</p>
         </div>
       </div>
       `
