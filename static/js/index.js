@@ -1,3 +1,13 @@
+if(localStorage.getItem("primeira-vez")) {
+  Swal.fire({
+    title: "🎊 Seja bem vindo! 🎊",
+    text: `
+      Seja muito bem vindo ao 'Threads dos programadores', aqui você encontrará programadores feras para fazer o Networking, por enquanto, o site está em desenvolvimento, pode conter alguns erros. E não tem muitos conteúdos, mas você pode contribuir! Poste algo que aconteceu com você esses dias enquanto codifica e tals, conto com a sua ajuda para transformarmos esse site em um lugarzinho agradável para todos!
+    `
+  })
+  localStorage.removeItem("primeira-vez")
+}
+
 if(localStorage.getItem("user")) {
   axios.get("/api/get-posts?user="+localStorage.getItem("user")).then((r) => {
     var resposta = r.data
@@ -7,7 +17,7 @@ if(localStorage.getItem("user")) {
         <!-- Infos do usuario -->
         <div class="header-post">
           <i class="fa-brands fa-connectdevelop"></i>
-          <strong>@${artigo.author}</strong>
+          <strong onclick="window.location.href='/perfil/${artigo.author}'">@${artigo.author}</strong>
         </div>
         <!-- conteudo -->
         <p id="conteudo">${artigo.text}</p>
