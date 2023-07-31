@@ -8,8 +8,9 @@
   </head>
   <body>
     <header>
-      <h1>CodeHub</h1>
+      <h1 onclick='window.location.href = "/"'>CodeHub</h1>
       <nav>
+        <i onclick="window.location.href= `/perfil/${localStorage.getItem('user')}`" class="fa-solid fa-list"></i>
         <i onclick="clickUser()" class="fa-solid fa-user"></i>
       </nav>
     </header>
